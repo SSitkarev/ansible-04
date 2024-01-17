@@ -1,0 +1,27 @@
+---
+# tasks file for roles/vector-role
+- name: Install Vector
+  hosts: vector
+  tasks:
+    - name: Install Vector package
+      become: true
+      ansible.builtin.yum:
+        name: "{{ vector_url }}"
+        state: present
+    - name: Template file
+      ansible.builtin.template:
+        src: vector.yml.j2
+        dest: vector.yml
+        mode: '0644'
+    - name: Create Vector service
+      become: true
+      ansible.builtin.template:
+        src: vector.service.j2
+        dest: /etc/systemd/system/vector.service
+        mode: '0644'
+    - name: Start Vector service
+      become: true
+      ansible.builtin.systemd:
+        name: vector
+        state: started
+        daemon_reload: true

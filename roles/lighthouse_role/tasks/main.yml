@@ -1,0 +1,58 @@
+---
+# tasks file for lighthouse
+- name: Install Nginx
+  hosts: lighthouse
+  tasks:
+    - name: Install epel-release
+      become: true
+      ansible.builtin.yum:
+        name: epel-release
+        state: present
+    - name: Install Nginx
+      become: true
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+    - name: Create config
+      become: true
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: '0644'
+      notify: start-nginx
+  tags: Nginx
+
+- name: Install Lighthouse
+  hosts: lighthouse
+  pre_tasks:
+    - name: Install Lighthouse Dependencies
+      become: true
+      ansible.builtin.yum:
+        name: git
+        state: present
+  tasks:
+    - name: Create Lighthouse directory
+      become: true
+      ansible.builtin.file:
+        path: /var/www/lighthouse
+        state: directory
+        recurse: yes
+        mode: '0755'
+        owner: nginx
+        group: nginx
+
+    - name:  Clone Lighthouse from Git
+      become: true
+      ansible.builtin.git:
+        force: true
+        repo: "{{ lighthouse_vcs }}"
+        version: master
+        dest: "{{ lighthouse_location_dir }}"
+        
+    - name: Create lighthouse config
+      become: true
+      ansible.builtin.template:
+        src: templates/lighthouse.conf.j2
+        dest: /etc/nginx/conf.d/default.conf
+        mode: '0644'
+      notify: restart-nginx
