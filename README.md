@@ -30,12 +30,20 @@
 
 8. Выложите все roles в репозитории. 
 
-[group_vars](https://github.com/SSitkarev/ansible-04/tree/main/group_vars)
+[clickhouse_role](https://github.com/SSitkarev/clickhouse_role)
+
+[lighthouse_role](https://github.com/SSitkarev/lighthouse_role)
+
+[vector_role](https://github.com/SSitkarev/vector_role)
 
 Проставьте теги, используя семантическую нумерацию. Добавьте roles в requirements.yml в playbook.
+
+[requirements](https://github.com/SSitkarev/ansible-04/blob/main/requirements.yml)
 
 9. Переработайте playbook на использование roles. Не забудьте про зависимости LightHouse и возможности совмещения roles с tasks.
 
 10. Выложите playbook в репозиторий.
+
+[paybook](https://github.com/SSitkarev/ansible-04/blob/main/site_role.yml)
 
 11. В ответе дайте ссылки на оба репозитория с roles и одну ссылку на репозиторий с playbook.
